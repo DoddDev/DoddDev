@@ -4,7 +4,7 @@ Welcome to my Portfolio! Here you will find an overview of the applications I ha
 # Touch
 ### Overview
 Touch is an application that transforms Mission Room Display Systems into a fully interactive Touch screen System. With Touch, users can control the display without the use of a mouse. By using a specialized infrared pen on one of the screens, an infrared camera detects the light emitted, calculates the precise location, and translates it into a mouse coordinate, moving the cursor to the desired point on the screen.
-### Technical Description
+### Description
 Touch utilises 3 Machine vision cameras provided by FLIR. To operate, Touch requires the use of the [Spinnaker SDK](https://www.flir.co.uk/products/spinnaker-sdk/?vertical=machine+vision&segment=iis), which adheres to the GenICam standard. This SDK enables full access to all camera nodes and facilitates the retrieval of frames from the camera.<br/><br/>
 After a frame is received, Touch uses a blob detection algorithm to identify any detected light. If light is detected the application calculates its center point. Before the mouse can be moved, Touch requires calibration. This process involves displaying a window on each screen with 9 crosshairs on each screen. The user is prompted to press the infrared pen to each crosshair. Once the user has pressed all crosshairs, the application calculates the relationship between the detected light and the crosshair positions using homography. The results of the calculations are stored on the computer, allowing Touch to access the calibration data when the user opens the application.<br/><br/>
 When Touch detects a new blob, the application utilizes the homography matrix to accurately translate the blob's position into on-screen coordinates, moving the mouse cursor to the corresponding location.<br/><br/>
@@ -25,15 +25,23 @@ The Cameras that are used in the Touch application are mounted to the roof of th
 To undistort the camera frames, access to the cameras is required, which is achieved using the [Spinnaker SDK](https://www.flir.co.uk/products/spinnaker-sdk/?vertical=machine+vision&segment=iis). This SDK provides comprehensive access to all camera nodes and facilitates the retrieval of frames for processing. <br/><br/>
 After setting up the camera and successfully retrieving frames, the next step is to correct image distortion. To undistort a fisheye image, a chessboard pattern is required. This pattern is widely used for camera calibration and lens distortion correction, as it offers a well-defined, regular pattern that can be easily detected and analyzed in images. <br/><br/>
 Once a chessboard is detected using OpenCV, the frame is added to a list. After collecting 10 such images, the undistortion calculation is performed.<br/><br/>
-### SHOW CODE
+
 The undistortion process returns two matrices, which are then stored in the cameras' onboard memory. When Touch starts up, it accesses this stored data to calculate the homography matrix for mouse movements.<br/><br/>
-### SHOW GUI
 
 # Touch Gestures
 Complete when finished 
 
 # GSM-R Scenario
+### Overview
+This application was developed for East Midlands Railway as a training tool for train drivers to simulate the GSM-R emergency call process. It simulates trains moving across a line diagram and includes a full implementation of the UK railway signaling system. During the training session each driver is assigned to a train. The instructor can design real-world emergency scenarios for drivers to experience, allowing them to practice critical decision-making and response strategies in simulated, yet realistic, conditions.  When the instructor initiates the GSM-R emergency call, all trains in the simulation come to a stop. The instructor can also place a hazard on the line, and if a train encounters the hazard, the GSM-R emergency signal is automatically triggered. The drivers and the instructor then role play what to do in the given scenario. This simulation is highly beneficial for train drivers as it provides hands-on training in handling emergency situations. By replicating real-world scenarios, such as the activation of the GSM-R emergency call and encountering hazards on the track, drivers can practice and refine their responses in a controlled environment. This training tool helps ensure that drivers are well-prepared to manage emergencies effectively, enhancing overall safety on the railway.
+### Description
+This application consists of two key components: the railway infrastructure implementation and the visualization implementation. The infrastructure component manages the train's starting position, determines the path it will take, and its final destination. It also establishes whether the train is moving up or down the line. Additionally, it manages the railway signals, including their positions and whether they are two, three, or four-aspect color-light signals. It also determines if each signal is for an up or down line. Each time a train moves, the system identifies the next closest signal on the line and calculates the distance to it. If the train enters the bounding box of the signal, it reacts according to the signal's color:
 
-# Meeting Recorder
+- Red: The train stops immediately.
+- Yellow or Double Yellow: The train begins to slow down.
+- Green: The train continues at its normal speed.<br/>
 
-# 360 Image Face Blur
+This models how the train network works. The signals also have interactive functionality. When the user clicks on a signal, it can be changed from green to red. If a signal is set to red, the first signal behind it turns to double yellow, and the one before that turns to yellow. This feature allows the trainer to create varied scenarios, as trains can be in different positions when the emergency is triggered.
+### Role
+
+
